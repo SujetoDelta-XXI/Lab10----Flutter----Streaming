@@ -8,55 +8,71 @@ import '../widgets/footer_section.dart';
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
-  final String backgroundImage =
-      'https://abellagraphicdesign.com/wp-content/uploads/2023/10/netflix-1.jpg';
+  // Rutas de las imágenes
+  final String localBackground = 'assets/images/Netflix.jpg';
+  final String webBackground =
+      'https://i.imgur.com/Y5qY5ZB.jpg'; // respaldo en web (sin CORS)
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // 🔹 Fondo que cubre toda la pantalla
-          Positioned.fill(
-            child: Image.network(
-              backgroundImage,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          // 🔹 Blur y opacidad leve
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-              child: Container(color: Colors.black.withOpacity(0.1)),
-            ),
-          ),
-
-          // 🔹 Contenido principal con scroll
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: Colors.black, // Fondo negro general
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // 🔹 Sección superior con fondo de imagen local o web
+            Stack(
               children: [
-                _buildHeader(context),
-                _buildHero(context),
-                const SizedBox(height: 40),
-                const TrendingSection(),
-                const SizedBox(height: 40),
-                const ReasonsSection(),
-                const SizedBox(height: 40),
-                const FAQSection(),
-                const SizedBox(height: 40),
-                const FooterSection(),
+                Positioned.fill(
+                  child: _buildBackgroundImage(),
+                ),
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                    child: Container(color: Colors.black.withOpacity(0.1)),
+                  ),
+                ),
+                Column(
+                  children: [
+                    _buildHeader(context),
+                    _buildHero(context),
+                  ],
+                ),
               ],
             ),
-          ),
-        ],
+
+            // 🔹 Resto del contenido con fondo negro
+            const SizedBox(height: 40),
+            const TrendingSection(),
+            const SizedBox(height: 40),
+            const ReasonsSection(),
+            const SizedBox(height: 40),
+            const FAQSection(),
+            const SizedBox(height: 40),
+            const FooterSection(),
+          ],
+        ),
       ),
     );
   }
 
+  // ✅ Imagen de fondo con fallback
+  Widget _buildBackgroundImage() {
+    return Image.asset(
+      localBackground,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        // Si no encuentra la imagen local, usa la versión web
+        return Image.network(
+          webBackground,
+          fit: BoxFit.cover,
+        );
+      },
+    );
+  }
+
   // --------------------------
-  // Encabezado (logo, idioma, login)
+  // Encabezado
   // --------------------------
   Widget _buildHeader(BuildContext context) {
     return Padding(
@@ -107,7 +123,7 @@ class LandingPage extends StatelessWidget {
   }
 
   // --------------------------
-  // Sección principal (Hero con texto y campo de email)
+  // Hero principal (texto + botón)
   // --------------------------
   Widget _buildHero(BuildContext context) {
     return Padding(
