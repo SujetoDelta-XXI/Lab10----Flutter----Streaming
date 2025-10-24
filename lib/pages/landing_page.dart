@@ -9,7 +9,7 @@ class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
   final String backgroundImage =
-      'https://images.unsplash.com/photo-1637363990764-de84fd247b7d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV0ZmxpeHxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000';
+      'https://abellagraphicdesign.com/wp-content/uploads/2023/10/netflix-1.jpg';
 
   @override
   Widget build(BuildContext context) {
